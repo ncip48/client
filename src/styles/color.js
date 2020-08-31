@@ -1,0 +1,1 @@
+export const oranye = '#ee4d2d';
