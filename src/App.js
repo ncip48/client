@@ -41,7 +41,7 @@ export default App;
 */
 
 import React, {useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Route } from "react-router-dom";
 import AuthRoute from './routes/AuthRoute';
 import HomeRoute from './routes/HomeRoute';
 import Home from "./pages/HomePage/Home";
@@ -74,7 +74,6 @@ function App(props) {
   return (
     <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens, authUsername, setAuthUsername: setUsername }}>
       <Router>
-      <Switch>
           <AuthRoute exact path="/" component={Home} />
           <HomeRoute path="/login" component={Login} />
           <HomeRoute path="/daftar" component={Register} />
@@ -82,7 +81,6 @@ function App(props) {
           <AuthRoute path="/notif" component={Notif} />
           <AuthRoute path="/profile" component={Profile} />
           <Route path="/u/:username" component={ProfileUser} />
-          </Switch>
       </Router>
     </AuthContext.Provider>
   );
