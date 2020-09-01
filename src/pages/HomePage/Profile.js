@@ -64,7 +64,7 @@ function Profile(props) {
   const classes = useStyles();
   const { setAuthTokens } = useAuth();
   //const [isLoggedIn, setLoggedIn] = useState(true);
-  const existingUsername = localStorage.getItem("username");
+  const existingUsername = localStorage.getItem("authenticated");
   const [authUsername] = useState(JSON.parse(existingUsername)[0]);
   const [setIsError] = useState(false);
   const [data, setData] = useState("");

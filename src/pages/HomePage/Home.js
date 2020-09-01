@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 function Home(props) {
   const classes = useStyles();
   //const { setAuthTokens } = useAuth();
-  const existingUsername = localStorage.getItem("username");
+  const existingUsername = localStorage.getItem("authenticated");
   const [authUsername] = useState(JSON.parse(existingUsername)[0]);
   const [post, setPost] = useState({ data: [] });
   const [setIsError] = useState(false);

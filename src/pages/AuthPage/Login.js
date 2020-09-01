@@ -18,7 +18,8 @@ function Login() {
   const [isError, setIsError] = useState(false);
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
-  const { setAuthTokens, setAuthUsername } = useAuth();
+  const { setAuthTokens } = useAuth();
+  //const { setAuthUsername } = useAuth();
 
   const requestBody = {
     username: userName,
@@ -35,16 +36,16 @@ function Login() {
     axios
       .post("https://api-client1-mp-ncip.herokuapp.com/login", qs.stringify(requestBody), config)
       .then((result) => {
-          console.log(result.data.data)
-        if (result.status === 200) {
+          //console.log(result.data.data[0].username)
+        //if (result.status === 200) {
           //setAuthTokens(result.data.data.username);
           //setAuthTokens(true)
-          setAuthTokens(true)
-          setAuthUsername(result.data.data)
+          setAuthTokens(result.data.data)
+          //setAuthUsername(true)
           setLoggedIn(true);
-        } else {
-          setIsError(true);
-        }
+        //} else {
+        //  setIsError(true);
+        //}
       })
       .catch((e) => {
         setIsError(true);
