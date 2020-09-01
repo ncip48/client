@@ -19,6 +19,7 @@ import {
   Typography,
   CardMedia,
   Grid,
+  CircularProgress
 } from "@material-ui/core";
 //import { Person } from "@material-ui/icons";
 import { deepOrange } from "@material-ui/core/colors";
@@ -67,6 +68,7 @@ function Profile(props) {
   const [authUsername] = useState(JSON.parse(existingUsername)[0]);
   const [setIsError] = useState(false);
   const [data, setData] = useState("");
+  const [loading, setLoading] = useState(true);
 
   function getDetail() {
     axios
@@ -80,6 +82,7 @@ function Profile(props) {
           //setAuthUsername(result.data.data)
           //setLoggedIn(true);
           setData(result.data.data);
+          setLoading(false);
         } else {
           setIsError(true);
         }
@@ -107,7 +110,7 @@ function Profile(props) {
           image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
           title="Contemplative Reptile"
         />
-        <Container flexWrap="wrap" maxWidth="md" className={classes.container}>
+        <Container maxWidth="md" className={classes.container}>
           <Box alignItems="center">
             <Box
               justifyContent="center"
@@ -144,7 +147,7 @@ function Profile(props) {
                   Post
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                  {data.jumlah_post}
+                {loading ? <CircularProgress size={20} /> : data.jumlah_post}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -152,7 +155,7 @@ function Profile(props) {
                   Follower
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                  {data.jumlah_followers}
+                {loading ? <CircularProgress size={20} /> : data.jumlah_followers}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -160,7 +163,7 @@ function Profile(props) {
                   Following
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                  {data.jumlah_following}
+                {loading ? <CircularProgress size={20} /> : data.jumlah_following}
                 </Typography>
               </Grid>
             </Grid>
@@ -185,23 +188,6 @@ function Profile(props) {
       <BottomNavigator />
     </div>
   );
-}
-
-{
-  /*<List component="nav" aria-label="main mailbox folders">
-<ListItem button>
-  <ListItemIcon>
-    <Person />
-  </ListItemIcon>
-  <ListItemText primary="View Profile" />
-</ListItem>
-<ListItem button>
-  <ListItemIcon>
-    <DraftsIcon />
-  </ListItemIcon>
-  <ListItemText primary="Drafts" />
-</ListItem>
-</List>*/
 }
 
 export default Profile;

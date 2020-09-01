@@ -93,7 +93,7 @@ export default function PrimarySearchAppBar() {
       {location.pathname === "/" || location.pathname === "" ? (
         <AppBar position="fixed">
           <Toolbar disableGutters>
-            <Container flexWrap="wrap" maxWidth="md">
+            <Container maxWidth="md">
               <Box display="flex" alignItems="center">
                 <IconButton
                   edge="start"
@@ -104,7 +104,7 @@ export default function PrimarySearchAppBar() {
                   to="/"
                 >
                   <Typography className={classes.title} variant="h6" noWrap>
-                    PekanRaya.id
+                    IDNStyle
                   </Typography>
                 </IconButton>
                 <div className={classes.sectionDesktop}>
@@ -159,7 +159,7 @@ export default function PrimarySearchAppBar() {
       ) : location.pathname === '/profile' || location.pathname === 'profile' || (location.pathname.split("/")[1] === 'u') ? (
         <AppBar position="fixed">
           <Toolbar disableGutters>
-            <Container flexWrap="wrap" maxWidth="md">
+            <Container maxWidth="md">
               <Box display="flex" alignItems="center">
                 <IconButton
                   edge="start"
@@ -180,7 +180,7 @@ export default function PrimarySearchAppBar() {
       ) : location.pathname === '/notif' || location.pathname === 'notif' ? (
         <AppBar position="fixed">
           <Toolbar disableGutters>
-            <Container flexWrap="wrap" maxWidth="md">
+            <Container maxWidth="md">
               <Box display="flex" alignItems="center">
                 <IconButton
                   edge="start"

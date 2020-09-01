@@ -13,6 +13,8 @@ import {
   IconButton,
   Card,
   Grid,
+  CircularProgress,
+  Box,
 } from "@material-ui/core";
 import { MoreVert, Favorite, Share } from "@material-ui/icons";
 import { red, grey } from "@material-ui/core/colors";
@@ -82,14 +84,19 @@ function Home(props) {
   const [authUsername] = useState(JSON.parse(existingUsername)[0]);
   const [post, setPost] = useState({ data: [] });
   const [setIsError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   function getPost() {
     axios
-      .get("https://api-client1-mp-ncip.herokuapp.com/homepage/" + authUsername.username)
+      .get(
+        "https://api-client1-mp-ncip.herokuapp.com/homepage/" +
+          authUsername.username
+      )
       .then((result) => {
-        console.log(result.data);
+        //console.log(result.data);
         if (result.status === 200) {
           setPost(result.data);
+          setLoading(false);
         } else {
           setIsError(true);
         }
@@ -101,13 +108,13 @@ function Home(props) {
 
   useEffect(() => {
     getPost();
-  }, []);
+  });
 
   return (
     <div>
       <Header />
       <div className={classes.root}>
-        <Container flexWrap="wrap" maxWidth="md" className={classes.container}>
+        <Container maxWidth="md" className={classes.container}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={8}>
               <div style={{ width: "100%" }}>
@@ -135,72 +142,80 @@ function Home(props) {
                   />
                 </Carousel>
               </div>
-              <Grid container spacing={3}>
-                {post.data.map((posts) => (
-                  <Grid item xs={12} sm={6}>
-                    <Card>
-                      <CardHeader
-                        avatar={
-                          posts.foto !== "" ? (
-                            <Avatar
-                              src={
-                                "/asset/img/user/" +
-                                posts.id_konsumen +
-                                "/" +
-                                posts.foto
-                              }
-                              className={classes.photo}
-                              component={Link}
-                              to={"/u/" + posts.username}
-                            />
-                          ) : (
-                            <Avatar
-                              className={classes.avatar}
-                              component={Link}
-                              to={"/u/" + posts.username}
-                            >
-                              HC
-                            </Avatar>
-                          )
-                        }
-                        action={
-                          <IconButton aria-label="settings">
-                            <MoreVert />
+              <Grid container spacing={3} style={{justifyContent:'center'}}>
+                {loading ? (
+                  <Box
+                    style={{marginTop:20}}
+                  >
+                    <CircularProgress size={20} style={{}} />
+                  </Box>
+                ) : (
+                  post.data.map((posts, key) => (
+                    <Grid item xs={12} sm={6} key={key}>
+                      <Card>
+                        <CardHeader
+                          avatar={
+                            posts.foto !== "" ? (
+                              <Avatar
+                                src={
+                                  "/asset/img/user/" +
+                                  posts.id_konsumen +
+                                  "/" +
+                                  posts.foto
+                                }
+                                className={classes.photo}
+                                component={Link}
+                                to={"/u/" + posts.username}
+                              />
+                            ) : (
+                              <Avatar
+                                className={classes.avatar}
+                                component={Link}
+                                to={"/u/" + posts.username}
+                              >
+                                HC
+                              </Avatar>
+                            )
+                          }
+                          action={
+                            <IconButton aria-label="settings">
+                              <MoreVert />
+                            </IconButton>
+                          }
+                          title={posts.nama_lengkap}
+                          subheader="September 14, 2016"
+                        />
+                        <CardMedia
+                          className={classes.mediaPost}
+                          image={
+                            "/asset/img/post/" +
+                            posts.id_konsumen +
+                            "/" +
+                            posts.img
+                          }
+                        />
+                        <CardContent>
+                          <Typography
+                            className={classes.judul}
+                            variant="h5"
+                            component={Link}
+                            to={"/p/" + posts.id_post}
+                          >
+                            {posts.judul_post}
+                          </Typography>
+                        </CardContent>
+                        <CardActions disableSpacing>
+                          <IconButton aria-label="add to favorites">
+                            <Favorite />
                           </IconButton>
-                        }
-                        title={posts.nama_lengkap}
-                        subheader="September 14, 2016"
-                      />
-                      <CardMedia
-                        className={classes.mediaPost}
-                        image={
-                          "/asset/img/post/" +
-                          posts.id_konsumen +
-                          "/" +
-                          posts.img
-                        }
-                      />
-                      <CardContent>
-                        <Typography
-                          className={classes.judul}
-                          variant="h5"
-                          component={Link}
-                          to={"/p/" + posts.id_post}
-                        >
-                          {posts.judul_post}
-                        </Typography>
-                      </CardContent>
-                      <CardActions disableSpacing>
-                        <IconButton aria-label="add to favorites">
-                          <Favorite />
-                        </IconButton>
-                        <IconButton aria-label="share">
-                          <Share />
-                        </IconButton>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                ))}
+                          <IconButton aria-label="share">
+                            <Share />
+                          </IconButton>
+                        </CardActions>
+                      </Card>
+                    </Grid>
+                  ))
+                )}
               </Grid>
             </Grid>
             <Grid item xs={12} sm={4} className={classes.showDesktop}>

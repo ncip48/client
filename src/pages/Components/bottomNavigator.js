@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
@@ -28,17 +28,18 @@ const useStyles = makeStyles((theme) => ({
 export default function LabelBottomNavigation() {
     const location = useLocation();
     const classes = useStyles();
-    const [value, setValue] = React.useState("home");
+    const [value, setValue] = React.useState(location.pathname.split("/")[1]);
 
-    useEffect(() => {
-      const locations = location.pathname;
+    //useEffect(() => {
+      //const locations = location.pathname;
         // Update the document title using the browser API
         //document.title = `You clicked ${count} times`;
-        if(locations === ''){setValue("home")}else if(locations === '/profile' || locations.split("/")[1] === 'u'){setValue('profile')}else{setValue('')}
-      });
+        //f(locations === ''){setValue("home")}else if(locations === '/profile' || locations.split("/")[1] === 'u'){setValue('profile')}else{setValue('')}
+        //setValue(location.pathname)
+      //});
 
     const handleChange = (event, newValue) => {
-        //setValue(newValue);
+        setValue(newValue);
         //console.log(location.pathname);
     };
 

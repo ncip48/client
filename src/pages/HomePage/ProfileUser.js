@@ -20,6 +20,7 @@ import {
   CardMedia,
   Card,
   Grid,
+  CircularProgress
 } from "@material-ui/core";
 import { deepOrange } from "@material-ui/core/colors";
 import axios from "axios";
@@ -72,16 +73,18 @@ function ProfileUser(props) {
   const {
     match: { params },
   } = props;
+  const [loading, setLoading] = useState(true);
 
   function getDetail() {
     axios
       .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + params.username)
       .then((result) => {
-        console.log(result.data.data.post);
+        //console.log(result.data.data.post);
         if (result.status === 200) {
           setData(result.data.data);
           setUser(result.data.data.user);
           setPost(result.data.data);
+          setLoading(false);
         } else {
           setIsError(true);
         }
@@ -104,7 +107,7 @@ function ProfileUser(props) {
           image="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"
           title="Contemplative Reptile"
         />
-        <Container flexWrap="wrap" maxWidth="md" className={classes.container}>
+        <Container maxWidth="md" className={classes.container}>
           <Box alignItems="center">
             <Box
               justifyContent="center"
@@ -124,7 +127,7 @@ function ProfileUser(props) {
                   <Avatar className={classes.photo}>HC</Avatar>
                 )}
                 <Typography variant="h6" className={classes.name}>
-                  {user.nama_lengkap}
+                {loading ? <CircularProgress size={20} /> : user.nama_lengkap}
                 </Typography>
               </Box>
             </Box>
@@ -138,7 +141,7 @@ function ProfileUser(props) {
                   Post
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                  {data.jumlah_post}
+                {loading ? <CircularProgress size={20} /> : data.jumlah_post}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -146,7 +149,7 @@ function ProfileUser(props) {
                   Follower
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                  {data.jumlah_followers}
+                {loading ? <CircularProgress size={20} /> : data.jumlah_followers}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -154,14 +157,16 @@ function ProfileUser(props) {
                   Following
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                  {data.jumlah_following}
+                {loading ? <CircularProgress size={20} /> : data.jumlah_following}
                 </Typography>
               </Grid>
             </Grid>
             <Divider />
-            <Grid container spacing={3} style={{marginTop:10}}>
-            {post.post.map((posts) => 
-                <Grid item xs={12} sm={4}>
+            <Grid container spacing={3} style={{marginTop:10, justifyContent:'center'}}>
+            {loading ? <CircularProgress size={20} style={{}}/>
+            :
+            post.post.map((posts, key) => 
+                <Grid item xs={12} sm={4} key={key}>
                 <Card>
                   <CardMedia
                     className={classes.mediaPost}
@@ -178,23 +183,6 @@ function ProfileUser(props) {
       <BottomNavigator />
     </div>
   );
-}
-
-{
-  /*<List component="nav" aria-label="main mailbox folders">
-<ListItem button>
-  <ListItemIcon>
-    <Person />
-  </ListItemIcon>
-  <ListItemText primary="View Profile" />
-</ListItem>
-<ListItem button>
-  <ListItemIcon>
-    <DraftsIcon />
-  </ListItemIcon>
-  <ListItemText primary="Drafts" />
-</ListItem>
-</List>*/
 }
 
 export default ProfileUser;
