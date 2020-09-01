@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, withRouter } from "react-router-dom";
-import { Button } from "../../components/AuthForm";
-import { useAuth } from "../../context/auth";
+//import { Link, Redirect, withRouter } from "react-router-dom";
+//import { Button } from "../../components/AuthForm";
+//import { useAuth } from "../../context/auth";
 import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
+//import List from "@material-ui/core/List";
+//import ListItem from "@material-ui/core/ListItem";
+//import ListItemIcon from "@material-ui/core/ListItemIcon";
+//import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import InboxIcon from "@material-ui/icons/Inbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
+//import InboxIcon from "@material-ui/icons/Inbox";
+//import DraftsIcon from "@material-ui/icons/Drafts";
 import Header from "../Components/header";
 import BottomNavigator from "../Components/bottomNavigator";
 import {
@@ -18,18 +18,13 @@ import {
   Avatar,
   Typography,
   CardMedia,
-  CardHeader,
-  CardContent,
-  CardActions,
   Card,
   Grid,
-  Paper,
-  IconButton,
 } from "@material-ui/core";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
+import { deepOrange } from "@material-ui/core/colors";
 import axios from "axios";
-import { MoreVert, Favorite, Share, Person } from "@material-ui/icons";
-const qs = require("querystring");
+//import { MoreVert, Favorite, Share, Person } from "@material-ui/icons";
+//const qs = require("querystring");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,17 +59,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function ListItemLink(props) {
-  return <ListItem button component="a" {...props} />;
-}
-
 function ProfileUser(props) {
   const classes = useStyles();
-  const { setAuthTokens } = useAuth();
+  //const { setAuthTokens } = useAuth();
   //const [isLoggedIn, setLoggedIn] = useState(true);
-  const existingUsername = localStorage.getItem("username");
-  const [authUsername] = useState(JSON.parse(existingUsername)[0]);
-  const [isError, setIsError] = useState(false);
+  //const existingUsername = localStorage.getItem("username");
+  //const [authUsername] = useState(JSON.parse(existingUsername)[0]);
+  const [setIsError] = useState(false);
   const [data, setData] = useState("");
   const [user, setUser] = useState("");
   const [post, setPost] = useState({post:[]});
@@ -84,15 +75,10 @@ function ProfileUser(props) {
 
   function getDetail() {
     axios
-      .get("http://192.168.1.108:9000/getdetail/" + params.username)
+      .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + params.username)
       .then((result) => {
         console.log(result.data.data.post);
         if (result.status === 200) {
-          //setAuthTokens(result.data.data.username);
-          //setAuthTokens(true)
-          //setAuthTokens(true)
-          //setAuthUsername(result.data.data)
-          //setLoggedIn(true);
           setData(result.data.data);
           setUser(result.data.data.user);
           setPost(result.data.data);
@@ -105,14 +91,9 @@ function ProfileUser(props) {
       });
   }
 
-  function logOut() {
-    setAuthTokens(false);
-    localStorage.removeItem("username");
-  }
-
   useEffect(() => {
     getDetail();
-  }, []);
+  });
 
   return (
     <div>

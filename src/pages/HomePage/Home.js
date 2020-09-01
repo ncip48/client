@@ -1,10 +1,8 @@
-import React, { useState, setState, state, useEffect } from "react";
-import { Link, Redirect, withRouter } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import { useAuth } from "../../context/auth";
+//import { useAuth } from "../../context/auth";
 import {
-  Button,
-  Paper,
   CardMedia,
   Container,
   CardHeader,
@@ -17,9 +15,9 @@ import {
   Grid,
 } from "@material-ui/core";
 import { MoreVert, Favorite, Share } from "@material-ui/icons";
-import { red, blue, green, black, grey } from "@material-ui/core/colors";
-import { Slide } from "material-auto-rotating-carousel";
-import { AutoRotatingCarousel } from "material-auto-rotating-carousel";
+import { red, grey } from "@material-ui/core/colors";
+//import { Slide } from "material-auto-rotating-carousel";
+//import { AutoRotatingCarousel } from "material-auto-rotating-carousel";
 import { makeStyles } from "@material-ui/core/styles";
 import Carousel from "react-material-ui-carousel";
 import Header from "../Components/header";
@@ -79,15 +77,15 @@ const useStyles = makeStyles((theme) => ({
 
 function Home(props) {
   const classes = useStyles();
-  const { setAuthTokens } = useAuth();
+  //const { setAuthTokens } = useAuth();
   const existingUsername = localStorage.getItem("username");
   const [authUsername] = useState(JSON.parse(existingUsername)[0]);
   const [post, setPost] = useState({ data: [] });
-  const [isError, setIsError] = useState(false);
+  const [setIsError] = useState(false);
 
   function getPost() {
     axios
-      .get("http://192.168.1.108:9000/homepage/" + authUsername.username)
+      .get("https://api-client1-mp-ncip.herokuapp.com/homepage/" + authUsername.username)
       .then((result) => {
         console.log(result.data);
         if (result.status === 200) {
@@ -99,11 +97,6 @@ function Home(props) {
       .catch((e) => {
         setIsError(true);
       });
-  }
-
-  function logOut() {
-    setAuthTokens(false);
-    localStorage.removeItem("username");
   }
 
   useEffect(() => {

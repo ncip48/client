@@ -3,7 +3,7 @@ import { Route, Redirect } from "react-router-dom";
 import { useAuth } from "../context/auth";
 
 function AuthRoute({ component: Component, ...rest }) {
-  const { authTokens, authUsername } = useAuth();
+  const { authTokens } = useAuth();
   //console.log(authTokens)
   return (
     <Route

@@ -3,7 +3,6 @@ import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import {
   Card,
-  Logo,
   Form,
   Input,
   Button,
@@ -34,7 +33,7 @@ function Login() {
 
   function postLogin() {
     axios
-      .post("http://192.168.1.108:9000/login", qs.stringify(requestBody), config)
+      .post("https://api-client1-mp-ncip.herokuapp.com/login", qs.stringify(requestBody), config)
       .then((result) => {
           console.log(result.data.data)
         if (result.status === 200) {

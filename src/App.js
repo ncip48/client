@@ -40,8 +40,8 @@ class App extends Component {
 export default App;
 */
 
-import React, {useState, useEffect} from "react";
-import { BrowserRouter as Router, Link, Route } from "react-router-dom";
+import React, {useState } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import AuthRoute from './routes/AuthRoute';
 import HomeRoute from './routes/HomeRoute';
 import Home from "./pages/HomePage/Home";

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect, withRouter } from "react-router-dom";
-import { Button } from "../../components/AuthForm";
+import { Link } from "react-router-dom";
+//import { Button } from "../../components/AuthForm";
 import { useAuth } from "../../context/auth";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+//import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import InboxIcon from "@material-ui/icons/Inbox";
-import DraftsIcon from "@material-ui/icons/Drafts";
+//import InboxIcon from "@material-ui/icons/Inbox";
+//import DraftsIcon from "@material-ui/icons/Drafts";
 import Header from "../Components/header";
 import BottomNavigator from "../Components/bottomNavigator";
 import {
@@ -18,14 +18,12 @@ import {
   Avatar,
   Typography,
   CardMedia,
-  Card,
   Grid,
-  Paper,
 } from "@material-ui/core";
-import { Person } from "@material-ui/icons";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
+//import { Person } from "@material-ui/icons";
+import { deepOrange } from "@material-ui/core/colors";
 import axios from "axios";
-const qs = require("querystring");
+//const qs = require("querystring");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,12 +65,12 @@ function Profile(props) {
   //const [isLoggedIn, setLoggedIn] = useState(true);
   const existingUsername = localStorage.getItem("username");
   const [authUsername] = useState(JSON.parse(existingUsername)[0]);
-  const [isError, setIsError] = useState(false);
+  const [setIsError] = useState(false);
   const [data, setData] = useState("");
 
   function getDetail() {
     axios
-      .get("http://192.168.1.108:9000/getdetail/" + authUsername.username)
+      .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + authUsername.username)
       .then((result) => {
         //console.log(result.data.data.jumlah_followers);
         if (result.status === 200) {
@@ -98,7 +96,7 @@ function Profile(props) {
 
   useEffect(() => {
     getDetail();
-  }, []);
+  });
 
   return (
     <div>
