@@ -75,28 +75,29 @@ function ProfileUser(props) {
   } = props;
   const [loading, setLoading] = useState(true);
 
-  function getDetail() {
-    axios
-      .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + params.username)
-      .then((result) => {
-        //console.log(result.data.data.post);
-        if (result.status === 200) {
-          setData(result.data.data);
-          setUser(result.data.data.user);
-          setPost(result.data.data);
-          setLoading(false);
-        } else {
-          setIsError(true);
-        }
-      })
-      .catch((e) => {
-        setIsError(true);
-      });
-  }
+  //function getDetail() {}
 
   useEffect(() => {
-    getDetail();
-  });
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+    axios
+    .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + params.username, {signal:signal})
+    .then((result) => {
+      //console.log(result.data.data.post);
+      if (result.status === 200) {
+        setData(result.data.data);
+        setUser(result.data.data.user);
+        setPost(result.data.data);
+        setLoading(false);
+      } else {
+        setIsError(true);
+      }
+    })
+    .catch((e) => {
+      setIsError(true);
+    });
+    return () => abortController.abort();
+  }, [params.username,setIsError]);
 
   return (
     <div>

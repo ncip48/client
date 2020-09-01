@@ -19,7 +19,7 @@ import {
   Typography,
   CardMedia,
   Grid,
-  CircularProgress
+  CircularProgress,
 } from "@material-ui/core";
 //import { Person } from "@material-ui/icons";
 import { deepOrange } from "@material-ui/core/colors";
@@ -70,9 +70,22 @@ function Profile(props) {
   const [data, setData] = useState("");
   const [loading, setLoading] = useState(true);
 
-  function getDetail() {
+  //function getDetail() {}
+
+  function logOut() {
+    setAuthTokens(false);
+    localStorage.removeItem("username");
+  }
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     axios
-      .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + authUsername.username)
+      .get(
+        "https://api-client1-mp-ncip.herokuapp.com/getdetail/" +
+          authUsername.username,
+        { signal: signal }
+      )
       .then((result) => {
         //console.log(result.data.data.jumlah_followers);
         if (result.status === 200) {
@@ -90,16 +103,8 @@ function Profile(props) {
       .catch((e) => {
         setIsError(true);
       });
-  }
-
-  function logOut() {
-    setAuthTokens(false);
-    localStorage.removeItem("username");
-  }
-
-  useEffect(() => {
-    getDetail();
-  });
+    return () => abortController.abort();
+  }, [authUsername.username, setIsError]);
 
   return (
     <div>
@@ -147,7 +152,7 @@ function Profile(props) {
                   Post
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                {loading ? <CircularProgress size={20} /> : data.jumlah_post}
+                  {loading ? <CircularProgress size={20} /> : data.jumlah_post}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -155,7 +160,11 @@ function Profile(props) {
                   Follower
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                {loading ? <CircularProgress size={20} /> : data.jumlah_followers}
+                  {loading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    data.jumlah_followers
+                  )}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -163,13 +172,21 @@ function Profile(props) {
                   Following
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                {loading ? <CircularProgress size={20} /> : data.jumlah_following}
+                  {loading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    data.jumlah_following
+                  )}
                 </Typography>
               </Grid>
             </Grid>
             <Divider />
             <List component="nav" aria-label="secondary mailbox folders">
-              <ListItem button component={Link} to={"/u/"+authUsername.username}>
+              <ListItem
+                button
+                component={Link}
+                to={"/u/" + authUsername.username}
+              >
                 <ListItemText primary="My Account" />
               </ListItem>
               <ListItem button>

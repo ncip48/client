@@ -86,11 +86,16 @@ function Home(props) {
   const [setIsError] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  function getPost() {
+  //function getPost() {}
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    const signal = abortController.signal;
     axios
       .get(
         "https://api-client1-mp-ncip.herokuapp.com/homepage/" +
-          authUsername.username
+          authUsername.username,
+        { signal: signal }
       )
       .then((result) => {
         //console.log(result.data);
@@ -104,11 +109,8 @@ function Home(props) {
       .catch((e) => {
         setIsError(true);
       });
-  }
-
-  useEffect(() => {
-    getPost();
-  });
+      return () => abortController.abort();
+  }, [authUsername.username, setIsError]);
 
   return (
     <div>
@@ -142,11 +144,9 @@ function Home(props) {
                   />
                 </Carousel>
               </div>
-              <Grid container spacing={3} style={{justifyContent:'center'}}>
+              <Grid container spacing={3} style={{ justifyContent: "center" }}>
                 {loading ? (
-                  <Box
-                    style={{marginTop:20}}
-                  >
+                  <Box style={{ marginTop: 20 }}>
                     <CircularProgress size={20} style={{}} />
                   </Box>
                 ) : (
