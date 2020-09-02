@@ -20,7 +20,7 @@ import {
   CardMedia,
   Card,
   Grid,
-  CircularProgress
+  CircularProgress,
 } from "@material-ui/core";
 import { deepOrange } from "@material-ui/core/colors";
 import axios from "axios";
@@ -56,8 +56,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
   },
   mediaPost: {
-      height:280,
-  }
+    height: 280,
+  },
 }));
 
 function ProfileUser(props) {
@@ -69,7 +69,7 @@ function ProfileUser(props) {
   const [setIsError] = useState(false);
   const [data, setData] = useState("");
   const [user, setUser] = useState("");
-  const [post, setPost] = useState({post:[]});
+  const [post, setPost] = useState({ post: [] });
   const {
     match: { params },
   } = props;
@@ -81,23 +81,28 @@ function ProfileUser(props) {
     const abortController = new AbortController();
     const signal = abortController.signal;
     axios
-    .get("https://api-client1-mp-ncip.herokuapp.com/getdetail/" + params.username, {signal:signal})
-    .then((result) => {
-      //console.log(result.data.data.post);
-      if (result.status === 200) {
-        setData(result.data.data);
-        setUser(result.data.data.user);
-        setPost(result.data.data);
-        setLoading(false);
-      } else {
+      .get(
+        "https://api-client1-mp-ncip.herokuapp.com/getdetail/" +
+          params.username,
+        { signal: signal }
+      )
+      .then((result) => {
+        //console.log(result.data.data.post);
+        if (result.status === 200) {
+          setData(result.data.data);
+          setUser(result.data.data.user);
+          setPost(result.data.data);
+          setLoading(false);
+        } else {
+          setIsError(true);
+        }
+      })
+      .catch((e) => {
         setIsError(true);
-      }
-    })
-    .catch((e) => {
-      setIsError(true);
-    });
+      });
+    document.title = "@" + params.username + " - IDNStyle.com";
     return () => abortController.abort();
-  }, [params.username,setIsError]);
+  }, [params.username, setIsError]);
 
   return (
     <div>
@@ -125,10 +130,15 @@ function ProfileUser(props) {
                     className={classes.photo}
                   />
                 ) : (
-                  <Avatar className={classes.photo}>HC</Avatar>
+                  <Avatar className={classes.photo}>
+                    {user.nama_lengkap.split(" ").length <= 1
+                      ? user.nama_lengkap.split("")[0]
+                      : user.nama_lengkap.split(" ")[0].split("")[0] +
+                      user.nama_lengkap.split(" ")[1].split("")[0]}
+                  </Avatar>
                 )}
                 <Typography variant="h6" className={classes.name}>
-                {loading ? <CircularProgress size={20} /> : user.nama_lengkap}
+                  {loading ? <CircularProgress size={20} /> : user.nama_lengkap}
                 </Typography>
               </Box>
             </Box>
@@ -142,7 +152,7 @@ function ProfileUser(props) {
                   Post
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                {loading ? <CircularProgress size={20} /> : data.jumlah_post}
+                  {loading ? <CircularProgress size={20} /> : data.jumlah_post}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -150,7 +160,11 @@ function ProfileUser(props) {
                   Follower
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                {loading ? <CircularProgress size={20} /> : data.jumlah_followers}
+                  {loading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    data.jumlah_followers
+                  )}
                 </Typography>
               </Grid>
               <Grid item xs={4} md={4}>
@@ -158,25 +172,39 @@ function ProfileUser(props) {
                   Following
                 </Typography>
                 <Typography variant="subtitle2" className={classes.title}>
-                {loading ? <CircularProgress size={20} /> : data.jumlah_following}
+                  {loading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    data.jumlah_following
+                  )}
                 </Typography>
               </Grid>
             </Grid>
             <Divider />
-            <Grid container spacing={3} style={{marginTop:10, justifyContent:'center'}}>
-            {loading ? <CircularProgress size={20} style={{}}/>
-            :
-            post.post.map((posts, key) => 
-                <Grid item xs={12} sm={4} key={key}>
-                <Card>
-                  <CardMedia
-                    className={classes.mediaPost}
-                    image={"/asset/img/post/" + posts.id_konsumen + "/" + posts.img}
-                  />
-                </Card>
-              </Grid>
-            )}
-              
+            <Grid
+              container
+              spacing={3}
+              style={{ marginTop: 10, justifyContent: "center" }}
+            >
+              {loading ? (
+                <CircularProgress size={20} style={{}} />
+              ) : (
+                post.post.map((posts, key) => (
+                  <Grid item xs={12} sm={4} key={key}>
+                    <Card>
+                      <CardMedia
+                        className={classes.mediaPost}
+                        image={
+                          "/asset/img/post/" +
+                          posts.id_konsumen +
+                          "/" +
+                          posts.img
+                        }
+                      />
+                    </Card>
+                  </Grid>
+                ))
+              )}
             </Grid>
           </Box>
         </Container>

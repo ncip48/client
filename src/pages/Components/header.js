@@ -7,7 +7,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
 import Badge from "@material-ui/core/Badge";
-import { Container, Box } from "@material-ui/core";
+import { Container, Box, Button } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
@@ -156,7 +156,9 @@ export default function PrimarySearchAppBar() {
             </Container>
           </Toolbar>
         </AppBar>
-      ) : location.pathname === '/profile' || location.pathname === 'profile' || (location.pathname.split("/")[1] === 'u') ? (
+      ) : location.pathname === "/profile" ||
+        location.pathname === "profile" ||
+        location.pathname.split("/")[1] === "u" ? (
         <AppBar position="fixed">
           <Toolbar disableGutters>
             <Container maxWidth="md">
@@ -177,7 +179,7 @@ export default function PrimarySearchAppBar() {
             </Container>
           </Toolbar>
         </AppBar>
-      ) : location.pathname === '/notif' || location.pathname === 'notif' ? (
+      ) : location.pathname === "/notif" || location.pathname === "notif" ? (
         <AppBar position="fixed">
           <Toolbar disableGutters>
             <Container maxWidth="md">
@@ -197,8 +199,47 @@ export default function PrimarySearchAppBar() {
               </Box>
             </Container>
           </Toolbar>
-        </AppBar>)
-        : null }
+        </AppBar>
+      ) : location.pathname === "/login" || location.pathname === "/daftar" ? (
+        <AppBar position="fixed">
+          <Toolbar disableGutters>
+            <Container maxWidth="md">
+              <Box display="flex" alignItems="center">
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="inherit"
+                  aria-label="menu"
+                  onClick={history.goBack}
+                >
+                  <ArrowBackIos />
+                </IconButton>
+                <Typography variant="h6" className={classes.title}>
+                  IDNStyle
+                </Typography>
+                {location.pathname === '/login' ?
+                <Button
+                  style={{ marginLeft: "auto" }}
+                  color="inherit"
+                  component={Link}
+                  to="/daftar"
+                >
+                  Daftar
+                </Button>
+                :
+                <Button
+                  style={{ marginLeft: "auto" }}
+                  color="inherit"
+                  component={Link}
+                  to="/login"
+                >
+                  Login
+                </Button>}
+              </Box>
+            </Container>
+          </Toolbar>
+        </AppBar>
+      ) : null}
     </div>
   );
 }

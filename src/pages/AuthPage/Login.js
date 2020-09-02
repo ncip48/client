@@ -1,29 +1,76 @@
 import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import axios from "axios";
 import {
-  Card,
-  Form,
-  Input,
+  OutlinedInput,
+  IconButton,
+  InputAdornment,
+  InputLabel,
+  FormControl,
   Button,
-  Error,
-  Center,
-} from "../../components/AuthForm";
+  Container,
+  Box,
+  CircularProgress,
+} from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
 import { useAuth } from "../../context/auth";
-import BaseLayout from "../AuthPage/BaseLayout";
-const qs = require('querystring');
+//import BaseLayout from "../AuthPage/BaseLayout";
+import Header from "../Components/header";
+const qs = require("querystring");
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    //marginTop: 56,
+    width: "100%",
+    margin: 0,
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: theme.palette.background.paper,
+    [theme.breakpoints.up("sm")]: {
+      //marginTop: 64,
+    },
+  },
+  textField: {
+    width: "100%",
+    marginTop: 5,
+    marginBottom: 5,
+    [theme.breakpoints.up("sm")]: {
+      width: "100%",
+    },
+  },
+}));
 
 function Login() {
+  const classes = useStyles();
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [isError, setIsError] = useState(false);
   const [userName, setUserName] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [values, setValues] = React.useState({
+    username: "",
+    password: "",
+    showPassword: false,
+  });
   const { setAuthTokens } = useAuth();
   //const { setAuthUsername } = useAuth();
 
+  const handleClickShowPassword = () => {
+    setValues({ ...values, showPassword: !values.showPassword });
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const requestBody = {
     username: userName,
-    password: password
+    password: password,
   };
 
   const config = {
@@ -33,22 +80,31 @@ function Login() {
   };
 
   function postLogin() {
+    setIsError(false);
+    setLoading(true);
     axios
-      .post("https://api-client1-mp-ncip.herokuapp.com/login", qs.stringify(requestBody), config)
+      .post(
+        "https://api-client1-mp-ncip.herokuapp.com/login",
+        qs.stringify(requestBody),
+        config
+      )
       .then((result) => {
-          //console.log(result.data.data[0].username)
-        //if (result.status === 200) {
+        //console.log(result.data.data[0].username)
+        setLoading(false);
+        if (result.data.result === 1) {
           //setAuthTokens(result.data.data.username);
           //setAuthTokens(true)
-          setAuthTokens(result.data.data)
+          setAuthTokens(result.data.data);
           //setAuthUsername(true)
           setLoggedIn(true);
-        //} else {
-        //  setIsError(true);
-        //}
+        } else {
+          setIsError(true);
+          setErrorMessage(result.data.error);
+        }
       })
       .catch((e) => {
         setIsError(true);
+        setErrorMessage("Connection Error!");
       });
   }
 
@@ -56,38 +112,79 @@ function Login() {
     return <Redirect to="/" />;
   }
 
+  console.log(password);
+
   return (
-    <BaseLayout>
-      <div className="container container-login">
-        <Center>
-          <Card>
-            <Form>
-              <Input
-                type="username"
+    <>
+      <Header />
+      <div className={classes.root}>
+        <Container maxWidth="md" className={classes.container}>
+          <Box
+            justifyContent="center"
+            alignContent="center"
+            alignItems="center"
+          >
+            <FormControl className={classes.textField} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-email">
+                Username
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-email"
+                type="text"
+                //value={values.password}
                 value={userName}
                 onChange={(e) => {
                   setUserName(e.target.value);
                 }}
-                placeholder="email"
+                //onChange={handleChange("password")}
+                labelWidth={70}
               />
-              <Input
-                type="password"
+            </FormControl>
+            <FormControl className={classes.textField} variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                id="outlined-adornment-password"
+                type={values.showPassword ? "text" : "password"}
+                //value={values.password}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
-                placeholder="password"
+                //onChange={handleChange("password")}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      edge="end"
+                    >
+                      {values.showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                labelWidth={70}
               />
-              <Button onClick={postLogin}>Sign In</Button>
-            </Form>
-            <Link to="/daftar">Don't have an account?</Link>
+            </FormControl>
+            <Button variant="contained" color="primary" onClick={postLogin} disabled={loading} style={{marginTop:5}}>
+              {loading && <CircularProgress size={20} />}
+              {!loading && "Login"}
+            </Button>
             {isError && (
-              <Error>The username or password provided were incorrect!</Error>
+              <Alert
+                variant="filled"
+                severity="error"
+                style={{ marginTop: 10 }}
+              >
+                {errorMessage}
+              </Alert>
             )}
-          </Card>
-        </Center>
+          </Box>
+        </Container>
       </div>
-    </BaseLayout>
+    </>
   );
 }
 

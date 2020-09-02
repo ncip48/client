@@ -24,6 +24,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Carousel from "react-material-ui-carousel";
 import Header from "../Components/header";
 import BottomNavigator from "../Components/bottomNavigator";
+import crypto from "crypto";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,6 +55,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     backgroundColor: red[500],
+    textDecoration: "none",
   },
   showDesktop: {
     display: "none",
@@ -88,6 +90,11 @@ function Home(props) {
 
   //function getPost() {}
 
+  const hash_url = (url) => {
+    const uri = url.toString();
+    return crypto.createHash("md5").update(uri).digest("hex");
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const signal = abortController.signal;
@@ -109,7 +116,8 @@ function Home(props) {
       .catch((e) => {
         setIsError(true);
       });
-      return () => abortController.abort();
+    document.title = "Home - IDNStyle.com";
+    return () => abortController.abort();
   }, [authUsername.username, setIsError]);
 
   return (
@@ -173,7 +181,14 @@ function Home(props) {
                                 component={Link}
                                 to={"/u/" + posts.username}
                               >
-                                HC
+                                {posts.nama_lengkap.split(" ").length <= 1
+                                  ? posts.nama_lengkap.split("")[0]
+                                  : posts.nama_lengkap
+                                      .split(" ")[0]
+                                      .split("")[0] +
+                                    posts.nama_lengkap
+                                      .split(" ")[1]
+                                      .split("")[0]}
                               </Avatar>
                             )
                           }
@@ -199,7 +214,7 @@ function Home(props) {
                             className={classes.judul}
                             variant="h5"
                             component={Link}
-                            to={"/p/" + posts.id_post}
+                            to={"/p/" + hash_url(posts.id_post)}
                           >
                             {posts.judul_post}
                           </Typography>

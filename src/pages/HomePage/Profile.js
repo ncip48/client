@@ -103,6 +103,7 @@ function Profile(props) {
       .catch((e) => {
         setIsError(true);
       });
+    document.title = "My Profile - IDNStyle.com";
     return () => abortController.abort();
   }, [authUsername.username, setIsError]);
 
@@ -135,7 +136,12 @@ function Profile(props) {
                     className={classes.photo}
                   />
                 ) : (
-                  <Avatar className={classes.photo}>HC</Avatar>
+                  <Avatar className={classes.photo}>
+                    {authUsername.nama_lengkap.split(" ").length <= 1
+                      ? authUsername.nama_lengkap.split("")[0]
+                      : authUsername.nama_lengkap.split(" ")[0].split("")[0] +
+                        authUsername.nama_lengkap.split(" ")[1].split("")[0]}
+                  </Avatar>
                 )}
                 <Typography variant="h6" className={classes.name}>
                   {authUsername.nama_lengkap}
